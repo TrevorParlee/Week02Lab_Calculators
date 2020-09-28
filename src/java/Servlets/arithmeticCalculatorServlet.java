@@ -28,23 +28,43 @@ public class arithmeticCalculatorServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-        String first = request.getParameter("first_entry");
-        request.setAttribute("first", first);
-       
+       String first = request.getParameter("first_entry");
        String second = request.getParameter("second_entry");
+       request.setAttribute("first", first);
        request.setAttribute("second", second);
+       if(first == "" || first == null || second == "" || second == null){
+           request.setAttribute("message", "please enter a number");
+       } else{
+       try{
        int numFirst = Integer.parseInt(first);
        int numSecond = Integer.parseInt(second);
        
        String selected = request.getParameter("selected");
        int numAdd = 0;
-       if("+".equals(selected)){
+       
+        if(selected.equals("add")){
            numAdd = (numFirst + numSecond);
-           
+            request.setAttribute("message", numAdd);
+        }
+        else if(selected.equals("sub")){
+            numAdd = (numFirst - numSecond);
+            request.setAttribute("message", numAdd);
+        }
+        else if(selected.equals("multi")){
+            numAdd = (numFirst * numSecond);
+            request.setAttribute("message", numAdd);
+        }
+        else if(selected.equals("div")){
+            numAdd = (numFirst % numSecond);
+            request.setAttribute("message", numAdd);
+        }
         
-       }
-       request.setAttribute("message", numAdd);
-       getServletContext().getRequestDispatcher("/WEB-INF/arithemticCalculator.jsp").forward(request, response);
+       
+      }catch(NumberFormatException nfe){
+           request.setAttribute("message", "invalid input");
+       }}
+       getServletContext().getRequestDispatcher("/WEB-INF/arithmeticCalculator.jsp").
+                forward(request, response);
     }
 
     
